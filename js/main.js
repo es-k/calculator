@@ -2,6 +2,7 @@ const numbers = document.querySelectorAll(".number");
 const operators = document.querySelectorAll(".operator");
 const display = document.querySelector(".display");
 const clearButton = document.querySelector(".clear");
+const deleteButton = document.querySelector(".delete");
 const assignment = document.querySelector(".assignment");
 
 // OPERATIONS //
@@ -59,7 +60,7 @@ function displayOperator(e) {
 function displayResult() {
   const result = operate(operation.first, operation.second, operation.operator);
   if (result % 1 !== 0) {
-    display.textContent = result.toFixed(2);
+    display.textContent = result.toFixed(3);
   } else {
     display.textContent = result;
   }
@@ -73,13 +74,21 @@ function evaluate() {
   }
 }
 
+function deleteChar() {
+  const str = display.textContent;
+  const lastChar = str.charAt(str.length - 1);
+  if (lastChar === operation.operator) operation.operator = "";
+  const noLastChar = str.slice(0, -1);
+  noLastChar === "" ? display.textContent = "0" : display.textContent = noLastChar;
+}
+
 function clearOperation() {
   operation.first = 0;
   operation.second = 0;
   operation.operator = "";
 }
 
-function clear(e) {
+function clear() {
   display.textContent = "0";
   clearOperation();
 }
@@ -94,6 +103,8 @@ operators.forEach((operator) => {
 });
 
 assignment.addEventListener("click", evaluate);
+
+deleteButton.addEventListener("click", deleteChar);
 
 clearButton.addEventListener("click", clear);
 // ----- //

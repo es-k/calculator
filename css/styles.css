@@ -66,6 +66,7 @@ button:active {
 .operator,
 .clear,
 .signal,
+.delete,
 .assignment {
   background-color: #dbeafe;
   color: #3b82f6;
