@@ -19,7 +19,7 @@ body {
   box-shadow: 0em 0em 2em 0 rgba(0, 0, 0, 0.2);
 }
 
-.display {
+.header {
   display: flex;
   align-items: center;
 }

@@ -1,7 +1,8 @@
 const numbers = document.querySelectorAll(".number");
-const operators = document.querySelectorAll(".operator")
-const header = document.querySelector("h1");
+const operators = document.querySelectorAll(".operator");
+const display = document.querySelector(".display");
 const clearButton = document.querySelector(".clear");
+const assignment = document.querySelector(".assignment");
 
 // OPERATIONS //
 const add = (a, b) => a + b;
@@ -9,6 +10,12 @@ const subtract = (a, b) => a - b;
 const multiply = (a, b) => a * b;
 const divide = (a, b) => a / b;
 //------------//
+
+const operation = {
+  first: 0,
+  second: 0,
+  operator: "",
+};
 
 //prettier-ignore
 function operate(a, b, operator) {
@@ -21,53 +28,72 @@ function operate(a, b, operator) {
   }
 }
 
-const operation = {
-  first : 0,
-  second : 0,
-  operator : "",
-}
-
 function displayNumber(e) {
-  if (header.textContent === "0"){
-    header.textContent = e.target.textContent;
-  }
-  else{
-    header.textContent = `${header.textContent}${e.target.textContent}`;
+  if (display.textContent === "0") {
+    display.textContent = e.target.textContent;
+  } else {
+    display.textContent = `${display.textContent}${e.target.textContent}`;
   }
 }
 
-function displayOperator(e){
-  if (!operation.operator){
-    operation.first = header.textContent;
+function splitOperation() {
+  if (operation.operator) {
+    const [one, two] = display.textContent.split(`${operation.operator}`);
+    const split = { one: one, two: two };
+    return split;
+  }
+}
+
+function displayOperator(e) {
+  if (!operation.operator) {
+    operation.first = display.textContent;
     operation.operator = e.target.textContent;
-    header.textContent = `${header.textContent}${e.target.textContent}`;
-  }
-  else {
-    if ([...header.textContent].includes("*")){
-      const [one, two] = header.textContent.split("*");
-      operation.second = two;
-      header.textContent = operate(operation.first, operation.second, operation.operator);
-    }
+    display.textContent = `${display.textContent}${e.target.textContent}`;
+  } else {
+    operation.second = splitOperation().two;
+    displayResult();
+    clearOperation();
   }
 }
 
-function clearOperation(){
+function displayResult() {
+  const result = operate(operation.first, operation.second, operation.operator);
+  if (result % 1 !== 0) {
+    display.textContent = result.toFixed(2);
+  } else {
+    display.textContent = result;
+  }
+}
+
+function evaluate() {
+  if (operation.first && operation.operator) {
+    operation.second = splitOperation().two;
+    displayResult();
+    clearOperation();
+  }
+}
+
+function clearOperation() {
   operation.first = 0;
   operation.second = 0;
   operation.operator = "";
 }
 
 function clear(e) {
-  header.textContent = "0";
+  display.textContent = "0";
   clearOperation();
 }
 
+// EVENTS //
 numbers.forEach((number) => {
   number.addEventListener("click", displayNumber);
 });
 
 operators.forEach((operator) => {
-  operator.addEventListener("click", displayOperator)
-})
+  operator.addEventListener("click", displayOperator);
+});
+
+assignment.addEventListener("click", evaluate);
 
 clearButton.addEventListener("click", clear);
+// ----- //
