@@ -59,7 +59,9 @@ function displayNumber(e) {
 
 function splitOperation() {
   if (operation.operator) {
-    const [one, two] = display.textContent.split(`${operation.operator}`);
+    const str = display.textContent;
+    const one = str.replace(`${operation.operator}${operation.second}`,"");
+    const two = str.replace(`${operation.first}${operation.operator}`,"");
     const split = { one: one, two: two };
     return split;
   }
