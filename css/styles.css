@@ -59,12 +59,12 @@ button:active {
   transform: scale(0.96);
 }
 .number,
-#dot {
+.period {
   background-color: hsl(214, 100%, 96%);
   color: #6b7280;
 }
 
-#dot {
+.period {
   font-size: 1.6em;
 }
 

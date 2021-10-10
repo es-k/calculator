@@ -3,6 +3,7 @@
 // ELEMENTS //
 const numbers = document.querySelectorAll(".number");
 const operators = document.querySelectorAll(".operator");
+const period = document.querySelector(".period");
 const display = document.querySelector(".display");
 const clearButton = document.querySelector(".clear");
 const deleteButton = document.querySelector(".delete");
@@ -19,11 +20,13 @@ operators.forEach((operator) => {
   operator.addEventListener("click", displayOperator);
 });
 
+period.addEventListener("click", displayPeriod);
+
 assignment.addEventListener("click", assign);
 
 deleteButton.addEventListener("click", deleteChar);
 
-signal.addEventListener("click", changeSign);
+signal.addEventListener("click", changeSignal);
 
 clearButton.addEventListener("click", clear);
 
@@ -52,9 +55,10 @@ function operate(a, b, operator) {
 }
 
 function displayNumber(e) {
+  const number = e.target.textContent;
   display.textContent === "0"
-    ? (display.textContent = e.target.textContent)
-    : (display.textContent = `${display.textContent}${e.target.textContent}`);
+    ? (display.textContent = number)
+    : (display.textContent = `${display.textContent}${number}`);
 }
 
 const getSecondNumber = () =>
@@ -66,17 +70,18 @@ function isLastCharOperator() {
 }
 
 function displayOperator(e) {
+  const operator = e.target.textContent;
   if (!operation.operator) {
     operation.first = display.textContent;
-    operation.operator = e.target.textContent;
-    display.textContent = `${operation.first}${e.target.textContent}`;
+    operation.operator = operator;
+    display.textContent = `${operation.first}${operator}`;
   } else if (!isLastCharOperator()) {
     operation.second = getSecondNumber();
     displayResult();
     clearOperation();
     operation.first = display.textContent;
-    operation.operator = e.target.textContent;
-    display.textContent = `${operation.first}${e.target.textContent}`;
+    operation.operator = operator;
+    display.textContent = `${operation.first}${operator}`;
   }
 }
 
@@ -85,6 +90,17 @@ function displayResult() {
   result % 1 === 0
     ? (display.textContent = result)
     : (display.textContent = result.toFixed(3));
+}
+
+const hasPeriod = (string) => string.includes(".");
+const addPeriod = () => (display.textContent = display.textContent.concat("."));
+
+function displayPeriod() {
+  if (!operation.operator && !hasPeriod(display.textContent)) {
+    addPeriod();
+  } else if (!hasPeriod(getSecondNumber())) {
+    addPeriod();
+  }
 }
 
 function assign() {
@@ -110,7 +126,7 @@ const makeNegative = (string) => `-${string}`;
 const makePositive = (string) => string.slice(1);
 
 //prettier-ignore
-function changeSign() {
+function changeSignal() {
   const str = display.textContent;
   if (!operation.operator) {
     isNegative(str)
@@ -143,6 +159,7 @@ function handleKeyboard(e) {
     switch(key.className) {
       case "number": displayNumber(event); break;
       case "operator": displayOperator(event); break;
+      case "period": displayPeriod(); break;
       case "assignment": assign(); break;
       case "delete": deleteChar(); break;
       case "clear": clear(); break;
