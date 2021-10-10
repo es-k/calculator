@@ -57,15 +57,8 @@ function displayNumber(e) {
     : (display.textContent = `${display.textContent}${e.target.textContent}`);
 }
 
-function splitOperation() {
-  if (operation.operator) {
-    const str = display.textContent;
-    const one = str.replace(`${operation.operator}${operation.second}`,"");
-    const two = str.replace(`${operation.first}${operation.operator}`,"");
-    const split = { one: one, two: two };
-    return split;
-  }
-}
+const getSecondNumber = () =>
+  display.textContent.replace(`${operation.first}${operation.operator}`, "");
 
 function isLastCharOperator() {
   const index = display.textContent.length - 1;
@@ -78,7 +71,7 @@ function displayOperator(e) {
     operation.operator = e.target.textContent;
     display.textContent = `${operation.first}${e.target.textContent}`;
   } else if (!isLastCharOperator()) {
-    operation.second = splitOperation().two;
+    operation.second = getSecondNumber();
     displayResult();
     clearOperation();
     operation.first = display.textContent;
@@ -96,7 +89,7 @@ function displayResult() {
 
 function assign() {
   if (operation.first && operation.operator) {
-    operation.second = splitOperation().two;
+    operation.second = getSecondNumber();
     displayResult();
     clearOperation();
   }
@@ -112,7 +105,7 @@ function deleteChar() {
     : (display.textContent = noLastChar);
 }
 
-const isNegative = (string) => (string.charAt(0) === "-");
+const isNegative = (string) => string.charAt(0) === "-";
 const makeNegative = (string) => `-${string}`;
 const makePositive = (string) => string.slice(1);
 
@@ -124,7 +117,7 @@ function changeSign() {
       ? (display.textContent = makePositive(str))
       : (display.textContent = makeNegative(str));
   } else {
-    const [one, two] = Object.values(splitOperation());
+    const two = getSecondNumber();
     isNegative(two)
       ? (display.textContent = `${one}${operation.operator}${makePositive(two)}`)
       : (display.textContent = `${one}${operation.operator}${makeNegative(two)}`);
