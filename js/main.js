@@ -1,3 +1,5 @@
+"use strict";
+
 // ELEMENTS //
 const numbers = document.querySelectorAll(".number");
 const operators = document.querySelectorAll(".operator");
@@ -17,13 +19,15 @@ operators.forEach((operator) => {
   operator.addEventListener("click", displayOperator);
 });
 
-assignment.addEventListener("click", evaluate);
+assignment.addEventListener("click", assign);
 
 deleteButton.addEventListener("click", deleteChar);
 
 signal.addEventListener("click", changeSign);
 
 clearButton.addEventListener("click", clear);
+
+window.addEventListener("keydown", handleKeyboard);
 // ----- //
 
 const operation = {
@@ -44,7 +48,6 @@ function operate(a, b, operator) {
     case "-": return subtract(a, b);
     case "*": return multiply(a, b);
     case "/": return divide(a, b);
-    default: return;
   }
 }
 
@@ -62,10 +65,10 @@ function splitOperation() {
   }
 }
 
-const isLastCharOperator = () => {
+function isLastCharOperator() {
   const index = display.textContent.length - 1;
   return display.textContent.charAt(index) === operation.operator;
-};
+}
 
 function displayOperator(e) {
   if (!operation.operator) {
@@ -89,7 +92,7 @@ function displayResult() {
     : (display.textContent = result.toFixed(3));
 }
 
-function evaluate() {
+function assign() {
   if (operation.first && operation.operator) {
     operation.second = splitOperation().two;
     displayResult();
@@ -107,7 +110,7 @@ function deleteChar() {
     : (display.textContent = noLastChar);
 }
 
-const isNegative = (string) => (string.charAt(0) === "-" ? true : false);
+const isNegative = (string) => (string.charAt(0) === "-");
 const makeNegative = (string) => `-${string}`;
 const makePositive = (string) => string.slice(1);
 
@@ -135,4 +138,19 @@ function clearOperation() {
 function clear() {
   display.textContent = "0";
   clearOperation();
+}
+
+//prettier-ignore
+function handleKeyboard(e) {
+  const key = document.querySelector(`button[data-key="${e.key}"]`);
+  if (key) { 
+    const event = { target: key };
+    switch(key.className) {
+      case "number": displayNumber(event); break;
+      case "operator": displayOperator(event); break;
+      case "assignment": assign(); break;
+      case "delete": deleteChar(); break;
+      case "clear": clear(); break;
+    }
+  }
 }
