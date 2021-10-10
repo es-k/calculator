@@ -60,7 +60,7 @@ button:active {
 }
 .number,
 .period {
-  background-color: hsl(214, 100%, 96%);
+  background-color: #DBEAFE;
   color: #6b7280;
 }
 
@@ -73,7 +73,7 @@ button:active {
 .signal,
 .delete,
 .assignment {
-  background-color: #dbeafe;
+  background-color: #BFDBFE;
   color: #3b82f6;
 }
 

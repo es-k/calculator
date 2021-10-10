@@ -127,12 +127,13 @@ const makePositive = (string) => string.slice(1);
 
 //prettier-ignore
 function changeSignal() {
-  const str = display.textContent;
+  const str = display.textContent
   if (!operation.operator) {
     isNegative(str)
       ? (display.textContent = makePositive(str))
       : (display.textContent = makeNegative(str));
   } else {
+    const one = operation.first;
     const two = getSecondNumber();
     isNegative(two)
       ? (display.textContent = `${one}${operation.operator}${makePositive(two)}`)
