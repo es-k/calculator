@@ -22,7 +22,7 @@ operators.forEach((operator) => {
 
 period.addEventListener("click", displayPeriod);
 
-assignment.addEventListener("click", assign);
+assignment.addEventListener("click", evaluate);
 
 deleteButton.addEventListener("click", deleteChar);
 
@@ -56,9 +56,11 @@ function operate(a, b, operator) {
 
 function displayNumber(e) {
   const number = e.target.textContent;
-  display.textContent === "0"
-    ? (display.textContent = number)
-    : (display.textContent = `${display.textContent}${number}`);
+  if (display.textContent.length < 15){
+    display.textContent === "0"
+      ? (display.textContent = number)
+      : (display.textContent = `${display.textContent}${number}`);
+  }
 }
 
 const getSecondNumber = () =>
@@ -76,9 +78,7 @@ function displayOperator(e) {
     operation.operator = operator;
     display.textContent = `${operation.first}${operator}`;
   } else if (!isLastCharOperator()) {
-    operation.second = getSecondNumber();
-    displayResult();
-    clearOperation();
+    evaluate();
     operation.first = display.textContent;
     operation.operator = operator;
     display.textContent = `${operation.first}${operator}`;
@@ -103,7 +103,7 @@ function displayPeriod() {
   }
 }
 
-function assign() {
+function evaluate() {
   if (operation.first && operation.operator) {
     operation.second = getSecondNumber();
     displayResult();
@@ -160,7 +160,7 @@ function handleKeyboard(e) {
       case "number": displayNumber(event); break;
       case "operator": displayOperator(event); break;
       case "period": displayPeriod(); break;
-      case "assignment": assign(); break;
+      case "assignment": evaluate(); break;
       case "delete": deleteChar(); break;
       case "clear": clear(); break;
     }
