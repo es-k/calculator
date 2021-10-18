@@ -1,4 +1,4 @@
-# [Calculator](https://es-k.github.io/calculator/)
+# [Calculator](https://gui-petry.github.io/calculator/)
 
 Simple calculator made with plain HTML/CSS/Javascript.
 
